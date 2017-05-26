@@ -23,10 +23,10 @@ INSERT INTO skills (skill_title) VALUES
   ('JS')
 ;
 
-INSERT INTO developers (first_name, last_name, age, rank_id) VALUES
-  ('Ivan', 'Petrov', 26, 1),
-  ('John', 'Smith', 30, 1),
-  ('Ihor', 'Shylo', 27, 3)
+INSERT INTO developers (first_name, last_name, age, salary, rank_id) VALUES
+  ('Ivan', 'Petrov', 26, 800, 1),
+  ('John', 'Smith', 30, 800, 1),
+  ('Ihor', 'Shylo', 27, 2000, 3)
 ;
 
 INSERT INTO projects (project_name, start_date, end_date) VALUES

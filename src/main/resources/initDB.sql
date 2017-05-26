@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS developers (
   first_name   VARCHAR(30) NOT NULL,
   last_name    VARCHAR(30) NOT NULL,
   age          INT         NOT NULL,
+  salary       DOUBLE      NOT NULL,
   rank_id      INT         NOT NULL,
   FOREIGN KEY (rank_id) REFERENCES ranks (rank_id)
 );
