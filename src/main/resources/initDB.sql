@@ -11,12 +11,12 @@ CREATE TABLE IF NOT EXISTS skills (
 );
 
 CREATE TABLE IF NOT EXISTS developers (
-developer_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
-first_name   VARCHAR(30) NOT NULL,
-last_name    VARCHAR(30) NOT NULL,
-age          INT         NOT NULL,
-rank_id      INT         NOT NULL,
-FOREIGN KEY (rank_id) REFERENCES ranks (rank_id)
+  developer_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  first_name   VARCHAR(30) NOT NULL,
+  last_name    VARCHAR(30) NOT NULL,
+  age          INT         NOT NULL,
+  rank_id      INT         NOT NULL,
+  FOREIGN KEY (rank_id) REFERENCES ranks (rank_id)
 );
 
 CREATE TABLE IF NOT EXISTS projects (
