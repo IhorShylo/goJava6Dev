@@ -1,0 +1,2 @@
+ALTER TABLE developers
+ADD salary DOUBLE NOT NULL;
