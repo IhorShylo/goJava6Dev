@@ -5,6 +5,7 @@ import com.goJava6Dev.project.model.Developer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +16,16 @@ import java.util.List;
 public class DeveloperDaoImpl implements DeveloperDao {
     private static final Logger log = LoggerFactory.getLogger(DeveloperDaoImpl.class);
 
-    public static final String JDBC_URL = "jdbc:mysql://localhost:3306/goJava6_db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoReconnect=true&useSSL=false";
-    public static final String USERNAME = "root";
-    public static final String PASSWORD = "80509167251";
     public static final String GET_ALL_QUERY = "SELECT * FROM developers";
     public static final String GET_BY_ID = "SELECT * FROM developers WHERE developer_id = ?";
+
+    private DataSource dataSource;
 
 
     @Override
     public List<Developer> getAll() {
         List<Developer> devList = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+        try (Connection connection = dataSource.getConnection();
              Statement statement = connection.createStatement()) {
             ResultSet rs = statement.executeQuery(GET_ALL_QUERY);
 
@@ -35,7 +35,7 @@ public class DeveloperDaoImpl implements DeveloperDao {
             }
 
         } catch (SQLException e) {
-            log.error("Can't get a connection from url -> " + JDBC_URL, e);
+            log.error("Can't get a connection from", e);
             throw new RuntimeException(e);
         }
         return devList;
@@ -44,7 +44,7 @@ public class DeveloperDaoImpl implements DeveloperDao {
     @Override
     public Developer getDeveloperById(int id) {
 
-        try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID)) {
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -56,7 +56,7 @@ public class DeveloperDaoImpl implements DeveloperDao {
             }
 
         } catch (SQLException e) {
-            log.error("Can't get a connection from url -> " + JDBC_URL, e);
+            log.error("Can't get a connection", e);
             throw new RuntimeException(e);
         }
     }
@@ -69,5 +69,9 @@ public class DeveloperDaoImpl implements DeveloperDao {
         developer.setAge(rs.getInt("age"));
         developer.setSalary(rs.getDouble("salary"));
         return developer;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 }
