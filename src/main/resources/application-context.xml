@@ -4,10 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean class="com.goJava6Dev.project.Main" id="main">
-        <property name="developerDao" ref="dao"/>
+        <property name="developerController" ref="developerController"/>
     </bean>
 
-    <bean class="com.goJava6Dev.project.dao.impl.DeveloperDaoImpl" id="dao">
+    <bean class="com.goJava6Dev.project.controllers.DeveloperController" id="developerController">
+        <property name="txManager" ref="txManager"/>
+        <property name="developerDao" ref="developerDao"/>
+    </bean>
+
+    <bean class="com.goJava6Dev.project.dao.impl.DeveloperDaoImpl" id="developerDao">
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
@@ -34,6 +39,11 @@
         <!--Размер Кеша стейтменов в пуле - максимальное число стейтменов, которые хранятся 1 коннекшене-->
         <property name="statementsCacheSize" value="${jdbc.statements.cache.size}"/>
 
+    </bean>
+
+    <!--Менеджер транзакций-->
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="txManager">
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <!--Spring обьект, который поддерживает работу с .properties файлами-->
