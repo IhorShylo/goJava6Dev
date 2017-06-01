@@ -21,8 +21,23 @@ public class DeveloperController {
         TransactionStatus status = txManager.getTransaction(new DefaultTransactionAttribute
                 (TransactionDefinition.PROPAGATION_REQUIRED));
 
-        try{
+        try {
             List<Developer> result = developerDao.getAll();
+            txManager.commit(status);
+            return result;
+        } catch (Exception e) {
+            txManager.rollback(status);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    public Developer getDeveloperById(int id) {
+        TransactionStatus status = txManager.getTransaction(new DefaultTransactionAttribute
+                (TransactionDefinition.PROPAGATION_REQUIRED));
+
+        try {
+            Developer result = developerDao.getDeveloperById(id);
             txManager.commit(status);
             return result;
         } catch (Exception e) {
