@@ -3,9 +3,8 @@ package com.goJava6Dev.project.controllers;
 import com.goJava6Dev.project.dao.DeveloperDao;
 import com.goJava6Dev.project.model.Developer;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.interceptor.DefaultTransactionAttribute;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,34 +16,20 @@ public class DeveloperController {
     private PlatformTransactionManager txManager;
     private DeveloperDao developerDao;
 
+    /*propagation - это правила по которым будет работать менеджер транзакций
+    * Propagation.REQUIRED(ПО ДЕФОЛТУ) - это означает, что если в менеджере транзакций в момент входа в этот метод не будет существовать
+    * транзакция, то она будет создана. Если она будет существовать, то будет использована
+    * Propagation.REQUIRED_NEW - это означает, что при входе в этот метод ВСЕГДА будет создаваться НОВАЯ ТРАНЗАКЦИЯ
+    * Propagation.MANDATORY - это означает, что если в момент входа в метод не будет найдено активных транзакций,
+    * то этот метод бросит ошибку*/
+    @Transactional(propagation = Propagation.REQUIRED)
     public List<Developer> getAllDevelopers() {
-        TransactionStatus status = txManager.getTransaction(new DefaultTransactionAttribute
-                (TransactionDefinition.PROPAGATION_REQUIRED));
-
-        try {
-            List<Developer> result = developerDao.getAll();
-            txManager.commit(status);
-            return result;
-        } catch (Exception e) {
-            txManager.rollback(status);
-            throw new RuntimeException(e);
-        }
-
+        return developerDao.getAll();
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public Developer getDeveloperById(int id) {
-        TransactionStatus status = txManager.getTransaction(new DefaultTransactionAttribute
-                (TransactionDefinition.PROPAGATION_REQUIRED));
-
-        try {
-            Developer result = developerDao.getDeveloperById(id);
-            txManager.commit(status);
-            return result;
-        } catch (Exception e) {
-            txManager.rollback(status);
-            throw new RuntimeException(e);
-        }
-
+        return developerDao.getDeveloperById(id);
     }
 
     public void setTxManager(PlatformTransactionManager txManager) {

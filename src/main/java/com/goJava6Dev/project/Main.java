@@ -25,8 +25,8 @@ public class Main {
     }
 
     private void start() {
-        System.out.println("All developers:");
-        developerController.getAllDevelopers().forEach(System.out::println);
+//        System.out.println("All developers:");
+//        developerController.getAllDevelopers().forEach(System.out::println);
         int devId = 6;
         System.out.println("Developer with id = " + devId + ":");
         System.out.println(developerController.getDeveloperById(devId));

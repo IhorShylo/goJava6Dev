@@ -4,6 +4,8 @@ import com.goJava6Dev.project.dao.DeveloperDao;
 import com.goJava6Dev.project.model.Developer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -21,8 +23,11 @@ public class DeveloperDaoImpl implements DeveloperDao {
 
     private DataSource dataSource;
 
-
+/*ДАО методы по работе с бд лучше применять propagation = Propagation.MANDATORY
+* Это связано с тем, что этот метод, это мельчайшая точка взаимодействия с БД и к моменту обращения к ней
+* с более "высокого слоя"(к примеру слой сервисов или контроллеров), транзакция уже должна будет быть открытой*/
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public List<Developer> getAll() {
         List<Developer> devList = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
@@ -42,6 +47,7 @@ public class DeveloperDaoImpl implements DeveloperDao {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public Developer getDeveloperById(int id) {
 
         try (Connection connection = dataSource.getConnection();
